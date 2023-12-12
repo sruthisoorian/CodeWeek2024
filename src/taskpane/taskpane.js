@@ -5,24 +5,31 @@
 
 /* global document, Office */
 
-var selectedOption;
+
+//GLOBAL VARIABLES
+var selectedOption; // Variable to select radio button
+var slideno = "n/a";  // Variable that hold current slide number -> for single slide text extraction
+var currSlideText = [];  //Array that holds strings of current slide --> for single slide text extraction
+
+var allSlideText = []; //2D Array that holds strings of all slides -> for all slides text extraction
+
 
 Office.onReady(function (info) {
-  if (info.host === Office.HostType.PowerPoint) { 
+  if (info.host === Office.HostType.PowerPoint) {
 
     document.getElementById('view1').style.display = "block";
     const infoIcons = document.getElementsByClassName("info-icon");
 
     // Show tooltip for the corresponding checklist item
     for (const icon of infoIcons) {
-      icon.addEventListener("mouseover", function() {
-          const lines = JSON.parse(this.getAttribute("data-info"));
-          const text = lines.join('<br>');
-          showTooltip(text, icon);
+      icon.addEventListener("mouseover", function () {
+        const lines = JSON.parse(this.getAttribute("data-info"));
+        const text = lines.join('<br>');
+        showTooltip(text, icon);
       });
 
-      icon.addEventListener("mouseout", function() {
-          hideTooltip();
+      icon.addEventListener("mouseout", function () {
+        hideTooltip();
       });
     }
 
@@ -30,7 +37,7 @@ Office.onReady(function (info) {
     document.getElementById("tabs").addEventListener("click", function (event) {
       // TODO
       // Reset - hide the labels when user switches between tabs
-      labels.forEach(function(label) {
+      labels.forEach(function (label) {
         label.style.display = "none";
       });
       if (event.target.classList.contains("tablinks")) {
@@ -48,24 +55,24 @@ Office.onReady(function (info) {
       }
     });
 
-      // Get references to all buttons and labels
+    // Get references to all buttons and labels
     var buttons = document.querySelectorAll(".submit-button");
     var labels = document.querySelectorAll(".label");
 
-     
-     // Add click event listeners to all buttons
-    buttons.forEach(function(button, index) {
-      button.addEventListener("click", function() {
+
+    // Add click event listeners to all buttons
+    buttons.forEach(function (button, index) {
+      button.addEventListener("click", function () {
         // Hide all the labels
-        labels.forEach(function(label) {
+        labels.forEach(function (label) {
           label.style.display = "none";
         });
 
         // Show the message on selected button click
         labels[index].style.display = "block";
       });
-  });
- }
+    });
+  }
 });
 
 
@@ -73,7 +80,7 @@ function openTab(tabName) {
   // Hide all views
   var views = document.getElementsByClassName("tabcontent");
   for (var i = 0; i < views.length; i++) {
-      views[i].style.display = "none";
+    views[i].style.display = "none";
   }
 
   // Show the selected view
@@ -98,6 +105,7 @@ function hideTooltip() {
   const tooltip = document.getElementById("tooltip");
   tooltip.style.display = "none";
 }
+
 
 function selectRadioButton() {
   // Check which radio button is selected and set the selectedOption variable to the selected radio button
@@ -137,5 +145,155 @@ function checkAll(){
     // call the singleCheckAll function here
   } else if(selectedOption === 'all'){
     // call the allCheckAll function
+  }
+}
+=======
+//BUTTON FUNCTIONS HERE
+
+//Function for single BB
+function checkBBSingle(){
+
+}
+
+//function for all BB
+function checkBBAll(){
+
+}
+
+//function for check MNPI single
+function checkMNPISingle(){
+
+}
+
+//function for check MNPI all
+function checkMNPIAll(){
+
+}
+
+//function for check sources single
+function checkSoucesSingle(){
+
+}
+
+//function for check sources all
+function checkSourcesAll(){
+
+}
+
+//function for everything check single
+function checkEverythingSingle(){
+
+}
+
+//function for everything check all
+function checkEverythingAll(){
+  
+}
+
+
+//EXTRACT strings of CURRENT SLIDE
+function extractCurrentSlideText() {
+  Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
+    var s = "";
+    if (asyncResult.status === Office.AsyncResultStatus.Failed) {
+      console.log("Error getting Metadata: " + asyncResult.error.message);
+      s = "Error getting Metadata: " + asyncResult.error.message;
+    } else {
+      console.log("Metadata for selected slides: " + JSON.stringify(asyncResult.value));
+      s = JSON.stringify(asyncResult.value);
+      let pos = s.indexOf("index\":") + 7;
+      slideno = s.substring(pos, s.indexOf("}]}"));
+    }
+
+    //console.log("result: ", s);
+    console.log("slideno: ", slideno);
+    console.log("slideno as int: ", parseInt(slideno));
+    getCurrentSlideStrings(parseInt(slideno));
+  });
+}
+
+//Helper funtion of extract strings of current slide
+async function getCurrentSlideStrings(n) {
+  await PowerPoint.run(async (context) => {
+    console.log("getting text from this slide: ", n);
+    const sheet = context.presentation.slides.getItemAt(n - 1);
+    const shapes = sheet.shapes;
+    shapes.load("items");
+    await context.sync();
+
+    console.log("Number of shapes on this slide: ", shapes.items.length);
+
+    for (let i = 0; i < shapes.items.length; i++) {
+      const s = shapes.getItemAt(i);
+      const t = s.textFrame.textRange;
+      t.load();
+      try {
+        await context.sync();
+        console.log(t.text);
+        currSlideText.push(t.text);
+      }
+      catch (err) {
+        console.log("Non-text shape skipped");
+      }
+
+
+    }
+
+  });
+
+}
+
+
+//EXTRACT strings of ALL SLIDES
+async function extractAllSlideText() {
+  await PowerPoint.run(async (context) => {
+      const sls = context.presentation.slides;
+      sls.load("items");
+      await context.sync();
+      console.log("Number of slides: " + sls.items.length);
+
+      for (let j = 0; j < sls.items.length; j++) {
+          const sheet = context.presentation.slides.getItemAt(j);
+          const shapes = sheet.shapes;
+          shapes.load("items");
+          await context.sync();
+
+          console.log("Number of shapes on this slide: ", shapes.items.length);
+          const slideStringsTemp = [];
+
+          for (let i = 0; i < shapes.items.length; i++) {
+              const s = shapes.getItemAt(i);
+              const t = s.textFrame.textRange;
+              t.load();
+              try {
+                  await context.sync();
+                  console.log(t.text);
+                  slideStringsTemp.push(t.text);
+              }
+              catch (err) {
+                  console.log("Non-text shape skipped");
+              }
+
+          }
+
+          allSlideText.push(slideStringsTemp);
+
+      } 
+
+  });
+}
+
+//functions to print slide string arrays to console
+function printCurrStrings() {
+  currSlideText.forEach(function (x) {
+      console.log(x);
+  })
+}
+
+function printAllStrings() {
+  for (var i = 0; i < allSlideText.length; i++) {
+      for (var j = 0; j < allSlideText[i].length; j++) {
+          console.log(allSlideText[i][j] + " from slide ", i+1);
+      }
   }
 }
