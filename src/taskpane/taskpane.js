@@ -18,6 +18,7 @@ Office.onReady(function (info) {
   if (info.host === Office.HostType.PowerPoint) {
 
     document.getElementById('view1').style.display = "block";
+    document.getElementById('current-slide').checked =  true;
     const infoIcons = document.getElementsByClassName("info-icon");
 
     // Show tooltip for the corresponding checklist item
