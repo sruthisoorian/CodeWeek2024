@@ -183,3 +183,14 @@ input[type="checkbox"] {
     font-size: 14px;
     font-weight: bold;
 }
+
+.bofa-logo {
+    width: 300px;
+    height: 200px;
+    position: relative;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100%;
+    max-height: 100%;
+}

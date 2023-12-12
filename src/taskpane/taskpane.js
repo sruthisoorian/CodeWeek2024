@@ -24,6 +24,9 @@ Office.onReady(function (info) {
 
     // Assign event handlers to the tabs
     document.getElementById("tabs").addEventListener("click", function (event) {
+      labels.forEach(function(label) {
+        label.style.display = "none";
+      });
       if (event.target.classList.contains("tablinks")) {
         var tabName = event.target.getAttribute("onclick").split("'")[1];
         openTab(tabName);
@@ -60,6 +63,7 @@ Office.onReady(function (info) {
 });
 
 function openTab(tabName) {
+
   // Hide all views
   var views = document.getElementsByClassName("tabcontent");
   for (var i = 0; i < views.length; i++) {
