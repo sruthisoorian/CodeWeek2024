@@ -7,6 +7,8 @@
 
 Office.onReady(function (info) {
   if (info.host === Office.HostType.PowerPoint) { 
+
+    document.getElementById('view1').style.display = "block";
     const infoIcons = document.getElementsByClassName("info-icon");
 
     // Show tooltip for the corresponding checklist item
@@ -24,6 +26,8 @@ Office.onReady(function (info) {
 
     // Assign event handlers to the tabs
     document.getElementById("tabs").addEventListener("click", function (event) {
+      // TODO
+      // Reset - hide the labels when user switches between tabs
       labels.forEach(function(label) {
         label.style.display = "none";
       });
