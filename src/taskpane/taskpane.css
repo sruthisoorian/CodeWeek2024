@@ -81,7 +81,7 @@ b {
 }
 
 h2{
-    font-size: 24px;
+    font-size: 22px;
     padding-left: 15px;
     font-family: Arial, Helvetica, sans-serif;
     color:#032c4d
@@ -106,7 +106,7 @@ ul{
 li{
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 550;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
 input[type="checkbox"] {
@@ -232,6 +232,16 @@ input[type="radio"] {
     font-size: 16px;
     font-weight: 500;
     padding-left: 15px;
+}
+
+.tool-button{
+    margin-left: 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 15px;
+    display: inline-block;
+    background-color:#032c4d;
+    color:#fff;
 }
 
 .result-box {
