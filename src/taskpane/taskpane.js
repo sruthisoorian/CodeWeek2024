@@ -5,20 +5,86 @@
 
 /* global document, Office */
 
-Office.onReady((info) => {
-  if (info.host === Office.HostType.PowerPoint) {
-    document.getElementById("sideload-msg").style.display = "none";
-    document.getElementById("app-body").style.display = "flex";
-    document.getElementById("run").onclick = run;
-  }
+Office.onReady(function (info) {
+  if (info.host === Office.HostType.PowerPoint) { 
+    const infoIcons = document.getElementsByClassName("info-icon");
+
+    // Show tooltip for the corresponding checklist item
+    for (const icon of infoIcons) {
+      icon.addEventListener("mouseover", function() {
+          const lines = JSON.parse(this.getAttribute("data-info"));
+          const text = lines.join('<br>');
+          showTooltip(text, icon);
+      });
+
+      icon.addEventListener("mouseout", function() {
+          hideTooltip();
+      });
+    }
+
+    // Assign event handlers to the tabs
+    document.getElementById("tabs").addEventListener("click", function (event) {
+      if (event.target.classList.contains("tablinks")) {
+        var tabName = event.target.getAttribute("onclick").split("'")[1];
+        openTab(tabName);
+
+        // Remove the 'active' class from all the tabs
+        var tabs = document.getElementsByClassName("tablinks");
+        for (var i = 0; i < tabs.length; i++) {
+          tabs[i].classList.remove("active");
+        }
+
+        // Apply the 'active' class to the clicked tab
+        event.target.classList.add("active");
+      }
+    });
+
+      // Get references to all buttons and labels
+    var buttons = document.querySelectorAll(".submit-button");
+    var labels = document.querySelectorAll(".label");
+
+     
+     // Add click event listeners to all buttons
+    buttons.forEach(function(button, index) {
+      button.addEventListener("click", function() {
+        // Hide all the labels
+        labels.forEach(function(label) {
+          label.style.display = "none";
+        });
+
+        // Show the message on selected button click
+        labels[index].style.display = "block";
+      });
+  });
+ }
 });
 
-export async function run() {
-  /**
-   * Insert your PowerPoint code here
-   */
-  const options = { coercionType: Office.CoercionType.Text };
+function openTab(tabName) {
+  // Hide all views
+  var views = document.getElementsByClassName("tabcontent");
+  for (var i = 0; i < views.length; i++) {
+      views[i].style.display = "none";
+  }
 
-  await Office.context.document.setSelectedDataAsync(" ", options);
-  await Office.context.document.setSelectedDataAsync("Hello World!", options);
+  // Show the selected view
+  document.getElementById(tabName).style.display = "block";
+}
+
+// Tooltip functionality
+function showTooltip(text, element) {
+  const tooltip = document.getElementById("tooltip");
+  tooltip.innerHTML = text;
+
+  const rect = element.getBoundingClientRect();
+  const top = rect.top + window.scrollY - tooltip.offsetHeight - 10;
+  const left = rect.left + window.scrollX + (rect.width - tooltip.offsetWidth);
+  tooltip.style.top = top + "px";
+  tooltip.style.left = left + "px";
+  tooltip.style.display = "block";
+}
+
+// Hide tooltip
+function hideTooltip() {
+  const tooltip = document.getElementById("tooltip");
+  tooltip.style.display = "none";
 }

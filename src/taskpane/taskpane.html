@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Contoso Task Pane Add-in</title>
 
+    <script src="taskpane.js"></script>
+
     <!-- Office JavaScript API -->
     <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1.1/hosted/office.js"></script>
 
@@ -21,28 +23,90 @@
 </head>
 
 <body class="ms-font-m ms-welcome ms-Fabric">
-    <!-- TODO2: Update the header node. -->
-    <header class="ms-welcome__header ms-bgColor-neutralLighter">
-        <img width="90" height="90" src="../../assets/logo-filled.png" alt="Contoso" title="Contoso" />
-        <h1 class="ms-font-su">Hello Hello</h1>
-    </header>
-    <section id="sideload-msg" class="ms-welcome__main">
-        <h2 class="ms-font-xl">Please <a target="_blank" href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing">sideload</a> your add-in to see app body.</h2>
-    </section>
-    <main id="app-body" class="ms-welcome__main" style="display: none;">
-        <div class="padding">
-            <!-- TODO1: Create the insert-image button. -->
-            <!-- TODO3: Create the insert-text button. -->
-            <!-- TODO4: Create the get-slide-metadata button. -->
-            <!-- TODO5: Create the add-slides and go-to-slide buttons. -->
-        </div>
-    </main>
-    <section id="display-msg" class="ms-welcome__main">
-        <div class="padding">
-            <h3>Message</h3>
-            <div id="message"></div>
-        </div>
-    </section>
-</body>
+    <div id="tabs">
+        <button class="tablinks" onclick="openTab('view1')">Add-In</button>
+        <button class="tablinks" onclick="openTab('view2')">Compliance Checklist</button>
+    </div>
+    
+    <div id="view1" class="tabcontent">
+        <p>This is the Add-In view</p>
+    </div>
+    
+    <div id="view2" class="tabcontent" style="display: none;">
+        <h2>Compliance Checklist</h2>
+        <ul>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist1">
+                <label for="checklist1">Use of BB Disclaimer</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. Current BB Disclaimer.", "Risk Exposure: LOW If disclaimer is outdated.", "Risk Exposure: HIGH If disclaimer is missing altogether.", "Having a disclaimer, even an incorrect one, helps protect the Bank against litigation.","Hacing no disclaimer language opens us up to litigation.", "","2. Placement as 2nd slide behind cover page.", "Risk Exposure: LOW", "Placing the disclaimer at the front of the deck reduces the risk that clients argue they did not see it."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist2">
+                <label for="checklist2">Use of Third Party External Source Information</label>
+                <i class="info-icon" data-info='["Requirements:","", "1. Publicly available 3rd party sources.", "Risk Exposure: HIGH", "Publicly available 3rd party sources do not expose the bank to risk, but if the information sourced is private, proprietary or confidential third party information, including in the presentation is against Bank policy and opens us up to litigation.", "", "2. No stale, vague or outdated sources.", "Risk Exposure: MEDIUM", "Presenting old or outdated information may trigger reputational risk and/or litigation.", "", "3. Proper source citation.", "Risk Expsosure: MEDIUM", "Improper source citation may open us up to litigation."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist3">
+                <label for="checklist3">Use of BofAML Global Research</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. No BofA Global Research analyst commentary(very limited exceptions as noted in the Guidelines).", "Risk Exposure: HIGH", "BB employees are not allowed to share analyst commentary as per Bank policy.", "", "2. Excerpts from approved BofA Global Research Macro Economic Reports are permitted provided the source is properly cited.", "Risk Exposure: MEDIUM", "Improper source citation may opens us up to litigation."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist4">
+                <label for="checklist4">Use of Exaggerated Claims</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. Language must be fair, balanced and not misleading.", "Risk Exposure: HIGH", "Making unfair statements or unsubstantiated claims opens us up to litigation.", "", "2. Support claims of excellence with proper citations.", "Risk Exposure: HIGH", "Making unfair statements or unsubstantiated claims opens us up to litigation."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist5">
+                <label for="checklist5">Use of Peer Profiler</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. Do not include confidential or peer group information with a client, non-affiliate third parties or unauthorized affiliate.", "Risk Exposure: HIGH", "Sharing private, proprietary, or confidential third party information is against Bank policy and opens us up to litigation.", "", "2. May include broad sales size range of the peer group and the industry description for the company.", "Risk Exposure: LOW", "Broad generalizations of company size and industry help obscure, and therefore protect identification."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist6">
+                <label for="checklist6"> Use of Case Studies</label>
+                <i class="info-icon" data-info='["Requirements:", "", "BB case studies must not contain the client name without written consent, must contain information about bank products only, and must include the BB disclaimer.", "Risk Exposure: HIGH", "Sharing private, proprietary or confidential third party information opens us up to litigation."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist7">
+                <label for="checklist7">Use of Market Trends and Observations Slide</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. High level market trends/observations for companies in similar industries is acceptable.", "Risk Exposure: LOW", "Broad generalizations of company trends within similar industries help obscure, and therefore protect identification."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist8">
+                <label for="checklist8"> Calling with Partners Outside of BB</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. Solution specific pitch materials of partners outside of BB should be delivered in a separate pitchbook.", "Risk Exposure: HIGH", "BB employees are not allowed to sell non-BB products as per Bank policy."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist9">
+                <label for="checklist9"> Use of Swaps Information</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. Slides that detail the bank Swap capabilities and mechanics only are acceptable; specific Swap details or pitch materials are not acceptable.", "Risk Exposure: HIGH", "BB employees are not allowed to sell non-BB products as per Bank policy."]'>i</i>
+            </li>
+            <li class="checklist-item">
+                <input type="checkbox" id="checklist10">
+                <label for="checklist10"> Bank of America Brand Guidelines</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. Always follow the most current Global Markets and Global Banking Brand guidelines applicable to BB (slide template, format, logo, colors, etc.)","Risk Exposure: MEDIUM", "Consistently representing our brand publicly drives brand recognition, loyalty and reputation."]'>i</i>
+            </li>
+            <li>
+                <input type="checkbox" id="checklist11">
+                <label for="checklist11"> Pre-Approval Guidelines</label>
+                <i class="info-icon" data-info='["Requirements:", "", "1. MAP approval required for any new custom slide templates or individual slides, created in market by client teams, that are intended to be used within multiple BB pitchbook and client/prospect presentation materials.", "Risk Exposure: HIGH", "Legal, Compliance and Brand approval is required for materials going to >20 people externally as per Bank policy."]'>i</i>
+            </li>
+        </ul>
+    
+        <!-- Tooltip container -->
+        <div id="tooltip" class="tooltip"></div>
 
+        <div class="buttons">
+            <button id="verify" class="submit-button"> Verify</button>
+            <button id="export" class="submit-button"> Export</button>
+            <button id="send" class="submit-button"> Send</button>
+        </div>
+
+        <div class="messages-label">
+            <label class="label" id="verify-label"> Verified by me</label>
+            <label class="label"id="export-label"> Exporting checklist to local</label>
+            <label class="label" id="send-label"> Sending checklist</label>
+        </div>
+
+    </div>
+</body>
 </html>
