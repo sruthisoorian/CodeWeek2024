@@ -5,11 +5,14 @@
 
 /* global document, Office */
 
+
 //GLOBAL VARIABLES
+var selectedOption; // Variable to select radio button
 var slideno = "n/a";  // Variable that hold current slide number -> for single slide text extraction
 var currSlideText = [];  //Array that holds strings of current slide --> for single slide text extraction
 
 var allSlideText = []; //2D Array that holds strings of all slides -> for all slides text extraction
+
 
 Office.onReady(function (info) {
   if (info.host === Office.HostType.PowerPoint) {
@@ -72,8 +75,8 @@ Office.onReady(function (info) {
   }
 });
 
-function openTab(tabName) {
 
+function openTab(tabName) {
   // Hide all views
   var views = document.getElementsByClassName("tabcontent");
   for (var i = 0; i < views.length; i++) {
@@ -103,6 +106,48 @@ function hideTooltip() {
   tooltip.style.display = "none";
 }
 
+
+function selectRadioButton() {
+  // Check which radio button is selected and set the selectedOption variable to the selected radio button
+  if (document.getElementById('current-slide').checked) {
+    selectedOption = 'current';
+  } else if (document.getElementById('all-slides').checked) {
+    selectedOption = 'all';
+  }
+}
+
+function checkBBDisclaimer(){
+  if(selectedOption === 'current'){
+    // call the singleBB function here
+  } else if(selectedOption === 'all'){
+    // call the allBB function
+  }
+}
+
+function checkMNPI() {
+  if(selectedOption === 'current'){
+    // call the singleMNPIfunction here
+  } else if(selectedOption === 'all'){
+    // call the allMNPI function
+  }
+}
+
+function checkSource() {
+  if(selectedOption === 'current'){
+    // call the singleSource function here
+  } else if(selectedOption === 'all'){
+    // call the allSource function
+  }
+}
+
+function checkAll(){
+  if(selectedOption === 'current'){
+    // call the singleCheckAll function here
+  } else if(selectedOption === 'all'){
+    // call the allCheckAll function
+  }
+}
+=======
 //BUTTON FUNCTIONS HERE
 
 //Function for single BB
