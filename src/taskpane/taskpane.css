@@ -81,6 +81,7 @@ b {
 }
 
 h2{
+    font-size: 24px;
     padding-left: 15px;
     font-family: Arial, Helvetica, sans-serif;
     color:#032c4d
@@ -105,6 +106,7 @@ ul{
 li{
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 550;
+  margin-bottom: 10px; 
 }
 
 input[type="checkbox"] {
@@ -151,7 +153,7 @@ input[type="checkbox"] {
 
 .tablinks {
     font-size: 14px;
-    font-weight: 600;
+    font-weight: bold;
     float: left;
     width: 50%;
     padding: 10px;
@@ -184,13 +186,63 @@ input[type="checkbox"] {
     font-weight: bold;
 }
 
-.bofa-logo {
+.bofa-logo1 {
     width: 300px;
     height: 200px;
     position: relative;
-    bottom: -20px;
+    top: -50px;
     left: 50%;
     transform: translateX(-50%);
     max-width: 100%;
     max-height: 100%;
 }
+
+.bofa-logo {
+    width: 300px;
+    height: 200px;
+    position: relative;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.slide-selection {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 15px;
+}
+
+.radio-label {
+    margin-right: 30px;
+    font-weight: bold;
+}
+
+input[type="radio"] {
+    transform: scale(1.3); /* Increase the size of the checkbox */
+    border: 2px solid #424040;
+    margin-right: 5px;
+    margin-left: 15px;
+    cursor: pointer;
+}
+.add-in-buttons {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 15px;
+}
+
+.result-box {
+    margin-top: 20px;
+    height: 240px;
+    overflow-y: auto;
+    border: 1px solid #555;
+    padding-left: 15px;
+    background-color: #f1ecec;
+  }
+
+  .output-line {
+    white-space: pre-wrap;
+  }

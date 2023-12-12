@@ -24,14 +24,56 @@
 
 <body class="ms-font-m ms-welcome ms-Fabric">
     <div id="tabs">
-        <button class="tablinks" onclick="openTab('view1')">Add-In</button>
+        <button class="tablinks" onclick="openTab('view1')"> QA Assessment Tools</button>
         <button class="tablinks" onclick="openTab('view2')">Compliance Checklist</button>
     </div>
     
     <div id="view1" class="tabcontent">
-        <p>This is the Add-In view</p>
+        <h2>Business Banking QA Assessment Tools</h2>
+
+        <!-- Slide Selection to allow user to choose to work with the current slide or the entire slide deck-->
+        <div class="slide-selection">
+            <input type="radio" id="current-slide" name="slide" value="Current Slide">
+            <label class="radio-label" for="current-slide">Current Slide</label>
+            <input type="radio" id="all-slides" name="slide" value="All Slides">
+            <label class="radio-label" for="all-slides">All Slides</label>
+        </div>
+
+        <div class="add-in-buttons">
+            <br>
+            <button class="submit-button"> Check BB Disclaimer </button> <br> <br>
+            <button class="submit-button"> Check MNPI </button> <br> <br>
+            <button class="submit-button"> Check Source </button> <br> <br>
+            <button class="submit-button"> Apply all checks </button>
+        </div>
+
+        <!-- Result box-->
+        <div class="result-box" id="resultBox">
+            <div class="output-line">
+                Some output
+            </div>
+            <div class="output-line">
+                Some output
+            </div>
+            <div class="output-line">
+                Some output
+            </div>
+            <div class="output-line">
+                Some output
+            </div>
+            <div class="output-line">
+                Some output
+            </div>
+            <div class="output-line">
+                Some output
+            </div>
+
+            <!-- Add more output lines as needed -->
+        </div>
+
+
         <div>
-            <img class="bofa-logo" src="/assets/Bank_of_America-Logo.png">
+            <img class="bofa-logo1" src="/assets/Bank_of_America-Logo.png">
         </div>
     </div>
     
