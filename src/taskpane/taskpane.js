@@ -6,7 +6,7 @@
 /* global document, Office */
 
 
-//GLOBAL VARIABLES
+// GLOBAL VARIABLES
 var selectedOption; // Variable to select radio button
 var slideno = "n/a";  // Variable that hold current slide number -> for single slide text extraction
 var currSlideText = [];  //Array that holds strings of current slide --> for single slide text extraction
@@ -147,7 +147,6 @@ function checkAll(){
     // call the allCheckAll function
   }
 }
-=======
 //BUTTON FUNCTIONS HERE
 
 //Function for single BB
