@@ -30,6 +30,8 @@ Office.onReady((info) => {
     document.getElementById('view1').style.display = "block";
     // document.getElementById('current-slide').checked =  true;
 
+    document.getElementById('output-paragraph').innerText = '';
+
     document.getElementById('region-search-label').innerText = '';
     const infoIcons = document.getElementsByClassName("info-icon");
 
@@ -146,32 +148,39 @@ function hideTooltip() {
 
 
 function checkBBDisclaimer() {
+  resetDisplayOutput();
   if (selectedOption == "current") {
     checkBBSingle();
   } else if (selectedOption == "all") {
     checkBBAll();
   }
+  setOutputDisplayText();
 }
 
 function checkMNPI() {
+  resetDisplayOutput();
   console.log("Running " + selectedOption + " MNPI check");
   if (selectedOption == "current") {
     checkMNPISingle();
   } else if (selectedOption == "all") {
     checkMNPIAll();
   }
+  setOutputDisplayText();
 }
 
 function checkSource() {
+  resetDisplayOutput();
   console.log("Running " + selectedOption + " Sources check");
   if (selectedOption == "current") {
     checkSoucesSingle();
   } else if (selectedOption == "all") {
     checkSourcesAll();
   }
+  setOutputDisplayText();
 }
 
 function checkAll() {
+  resetDisplayOutput();
   if (selectedOption == "current") {
     console.log("Running all QA Presentation Assesments on Slide " + slideno + " ==> ");
     displayOutput.push("Running all QA Presentation Assesments on Slide " + slideno + " ==> ")
@@ -185,6 +194,7 @@ function checkAll() {
     checkMNPIAll();
     checkSourcesAll();
   }
+  setOutputDisplayText();
 }
 
 
@@ -599,6 +609,15 @@ function printAllStrings() {
   }
 }
 
+//output display test
+function setOutputDisplayText(){
+  var outputString = '';
+  for(let i = 0; i < displayOutput.length; i++){
+    outputString = outputString + "> " + displayOutput[i] + "\n";
+  }
+  document.getElementById('output-paragraph').innerText = outputString;
+}
+
 //functions to reset array and slide variables
 function resetGlobalVars() {
   slideno = "n/a";
@@ -607,6 +626,11 @@ function resetGlobalVars() {
   allSlideText = [];
   displayOutput = [];
 
+}
+
+function resetDisplayOutput(){
+  displayOutput = [];
+  document.getElementById('output-paragraph').innerText = '';
 }
 
 // Default helper for invoking an action and handling errors.
