@@ -145,10 +145,10 @@ function hideTooltip() {
 // }
 
 
-function checkBBDisclaimer(){
-  if(selectedOption == "current"){
+function checkBBDisclaimer() {
+  if (selectedOption == "current") {
     checkBBSingle();
-  } else if(selectedOption == "all"){
+  } else if (selectedOption == "all") {
     checkBBAll();
   }
 }
@@ -156,33 +156,41 @@ function checkBBDisclaimer(){
 function checkMNPI() {
   console.log("Running " + selectedOption + " MNPI check");
   if (selectedOption == "current") {
-    // call the singleMNPIfunction here
     checkMNPISingle();
   } else if (selectedOption == "all") {
-    // call the allMNPI function
     checkMNPIAll();
   }
 }
 
 function checkSource() {
+  console.log("Running " + selectedOption + " Sources check");
   if (selectedOption == "current") {
-    // call the singleSource function here
+    checkSoucesSingle();
   } else if (selectedOption == "all") {
-    // call the allSource function
+    checkSourcesAll();
   }
 }
 
 function checkAll() {
   if (selectedOption == "current") {
-    // call the singleCheckAll function here
+    console.log("Running all QA Presentation Assesments on Slide " + slideno + " ==> ");
+    displayOutput.push("Running all QA Presentation Assesments on Slide " + slideno + " ==> ")
+    checkBBSingle();
+    checkMNPISingle();
+    checkSoucesSingle();
   } else if (selectedOption == "all") {
-    // call the allCheckAll function
+    console.log("Running all QA Presentation Assesments on all Slides ==>");
+    displayOutput.push("Running all QA Presentation Assesments on all Slides ==>");
+    checkBBAll();
+    checkMNPIAll();
+    checkSourcesAll();
   }
 }
 
 
 //BUTTON ACTION FUNCTIONS HERE
 
+/*
 //Check if there is a BB Disclaimer
 async function hasDisclaimer(text) {
   // Define the disclaimer text to search for
@@ -237,7 +245,7 @@ async function checkBBAll() {
     ? "<div class='output-line'>Disclaimer found in at least one slide</div>"
     : "<div class='output-line'>Disclaimer not found in any slide</div>";
 }
-
+*/
 
 // Function to check if the disclaimer is present on the current slide
 // async function checkBBSingle() {
@@ -271,12 +279,78 @@ async function checkBBAll() {
 //   });
 // }
 
+//function for check BB Disclaimer Single
+function checkBBSingle() {
+  const disclaimerText = "These materials have been prepared by one or more affiliates of Bank of America Corporation";
+  var found = false;
+
+  currSlideText.forEach(function (x) {
+    if (x.toLowerCase().includes(disclaimerText.toLowerCase())) {
+      found = true;
+    }
+  });
+
+  if (found == true) {
+    if (slideno == 2) {
+      //displayOutput.push("Slide 2 - BB Disclaimer placement is compliant.");
+      console.log("Slide 2 - BB Disclaimer placement is compliant.");
+    }
+    else {
+      displayOutput.push("Slide " + slideno + " - BB Disclaimer is found, but must be placed as 2nd slide, behind cover page");
+      console.log("Slide " + slideno + " - BB Disclaimer is found, but must be placed as 2nd slide, behind cover page");
+
+    }
+  }
+  else {
+    if (slideno == 2) {
+      console.log("Slide 2 - BB Disclaimer needs to be on 2nd slide, behind cover page");
+    }
+    else {
+      //displayOutput.push("Slide " + slideno + " - Warning: BB Disclaimer is not found.");
+      console.log("Slide " + slideno + " - Warning: BB Disclaimer is not found.");
+
+    }
+
+  }
+
+
+
+}
+
+//function for check BB Disclaimer All
+function checkBBAll() {
+  const disclaimerText = "These materials have been prepared by one or more affiliates of Bank of America Corporation";
+  var found = false;
+  for (var i = 0; i < allSlideText.length; i++) {
+    for (var j = 0; j < allSlideText[i].length; j++) {
+      if (allSlideText[i][j].toLowerCase().includes(disclaimerText.toLowerCase())) {
+        found = true;
+        if ((i + 1) == 2) {
+          //displayOutput.push("Slide 2 - BB Disclaimer placement is compliant.");
+          console.log("Slide 2 - BB Disclaimer placement is compliant.");
+        }
+        else {
+          displayOutput.push("Slide " + (i + 1) + " - BB Disclaimer is found, but must be placed as 2nd slide, behind cover page");
+          console.log("Slide " + (i + 1) + " - BB Disclaimer is found, but must be placed as 2nd slide, behind cover page");
+        }
+
+      }
+    }
+  }
+
+  if(found == false){
+    displayOutput.push("Warning: BB Disclaimer is not found.");
+    console.log("Warning: BB Disclaimer is not found.");
+  }
+}
+
+
 //function for check MNPI single
 function checkMNPISingle() {
 
   currSlideText.forEach(function (x) {
-    for(let i = 0; i < accountNumbers.length; i++){
-      if (x.toLowerCase().includes(accountNumbers[i].toString())){
+    for (let i = 0; i < accountNumbers.length; i++) {
+      if (x.toLowerCase().includes(accountNumbers[i].toString())) {
         displayOutput.push("Slide " + slideno + " - Found account number " + accountNumbers[i].toString() + ". Please remove from slide immediately.");
         console.log("Slide " + slideno + " - Found account number " + accountNumbers[i].toString() + ". Please remove from slide immediately.");
       }
@@ -284,17 +358,17 @@ function checkMNPISingle() {
   });
 
   currSlideText.forEach(function (x) {
-    for(let i = 0; i < SSN.length; i++){
-      if (x.toLowerCase().includes(SSN[i])){
+    for (let i = 0; i < SSN.length; i++) {
+      if (x.toLowerCase().includes(SSN[i])) {
         displayOutput.push("Slide " + slideno + " - Found SSN number " + SSN[i].toString() + ". Please remove from slide immediately.");
-        console.log("Slide " + slideno + " - Found SSN number " + SSN[i].toString()  + ". Please remove from slide immediately.");
+        console.log("Slide " + slideno + " - Found SSN number " + SSN[i].toString() + ". Please remove from slide immediately.");
       }
     }
   });
 
   currSlideText.forEach(function (x) {
-    for(let i = 0; i < OtherBankProducts.length; i++){
-      if (x.includes(OtherBankProducts[i])){
+    for (let i = 0; i < OtherBankProducts.length; i++) {
+      if (x.includes(OtherBankProducts[i])) {
         displayOutput.push("Slide " + slideno + " - Found mention of competitor bank product: " + OtherBankProducts[i] + ". Please verify content of slide.");
         console.log("Slide " + slideno + " - Found mention of competitor bank product: " + OtherBankProducts[i] + ". Please verify content of slide.");
       }
@@ -302,8 +376,8 @@ function checkMNPISingle() {
   });
 
   currSlideText.forEach(function (x) {
-    for(let i = 0; i < MNPITriggerWords.length; i++){
-      if (x.toLowerCase().includes(MNPITriggerWords[i].toLowerCase())){
+    for (let i = 0; i < MNPITriggerWords.length; i++) {
+      if (x.toLowerCase().includes(MNPITriggerWords[i].toLowerCase())) {
         displayOutput.push("Slide " + slideno + " - Found indication of MNPI regarding " + MNPITriggerWords[i] + ". Please verify content of slide.");
         console.log("Slide " + slideno + " - Found indication of MNPI regarding " + MNPITriggerWords[i] + ". Please verify content of slide.");
       }
@@ -318,31 +392,31 @@ function checkMNPIAll() {
   for (var i = 0; i < allSlideText.length; i++) {
     for (var j = 0; j < allSlideText[i].length; j++) {
       //check for account numbers
-      for(let x = 0; x < accountNumbers.length; x++){
-        if (allSlideText[i][j].toLowerCase().includes(accountNumbers[x].toString())){
-          displayOutput.push("Slide " + (i+1) + " - Found account number " + accountNumbers[x].toString() + ". Please remove from slide immediately.");
-          console.log("Slide " + (i+1) + " - Found account number " + accountNumbers[x].toString() + ". Please remove from slide immediately.");
+      for (let x = 0; x < accountNumbers.length; x++) {
+        if (allSlideText[i][j].toLowerCase().includes(accountNumbers[x].toString())) {
+          displayOutput.push("Slide " + (i + 1) + " - Found account number " + accountNumbers[x].toString() + ". Please remove from slide immediately.");
+          console.log("Slide " + (i + 1) + " - Found account number " + accountNumbers[x].toString() + ". Please remove from slide immediately.");
         }
       }
       //check for ssns
-      for(let x = 0; x < SSN.length; x++){
-        if (allSlideText[i][j].toLowerCase().includes(SSN[x])){
-          displayOutput.push("Slide " + (i+1) + " - Found SSN number " + SSN[x].toString() + ". Please remove from slide immediately.");
-          console.log("Slide " + (i+1) + " - Found SSN number " + SSN[x].toString()  + ". Please remove from slide immediately.");
+      for (let x = 0; x < SSN.length; x++) {
+        if (allSlideText[i][j].toLowerCase().includes(SSN[x])) {
+          displayOutput.push("Slide " + (i + 1) + " - Found SSN number " + SSN[x].toString() + ". Please remove from slide immediately.");
+          console.log("Slide " + (i + 1) + " - Found SSN number " + SSN[x].toString() + ". Please remove from slide immediately.");
         }
       }
       //check for other bank products
-      for(let x = 0; x < OtherBankProducts.length; x++){
-        if (allSlideText[i][j].includes(OtherBankProducts[x])){
-          displayOutput.push("Slide " + (i+1) + " - Found mention of competitor bank product: " + OtherBankProducts[x] + ". Please verify content of slide.");
-          console.log("Slide " + (i+1) + " - Found mention of competitor bank product: " + OtherBankProducts[x] + ". Please verify content of slide.");
+      for (let x = 0; x < OtherBankProducts.length; x++) {
+        if (allSlideText[i][j].includes(OtherBankProducts[x])) {
+          displayOutput.push("Slide " + (i + 1) + " - Found mention of competitor bank product: " + OtherBankProducts[x] + ". Please verify content of slide.");
+          console.log("Slide " + (i + 1) + " - Found mention of competitor bank product: " + OtherBankProducts[x] + ". Please verify content of slide.");
         }
       }
       //check for MNPI trigger words
-      for(let x = 0; x < MNPITriggerWords.length; x++){
-        if (allSlideText[i][j].toLowerCase().includes(MNPITriggerWords[x].toLowerCase())){
-          displayOutput.push("Slide " + (i+1) + " - Found indication of MNPI regarding " + MNPITriggerWords[x] + ". Please verify content of slide.");
-          console.log("Slide " + (i+1) + " - Found indication of MNPI regarding " + MNPITriggerWords[x] + ". Please verify content of slide.");
+      for (let x = 0; x < MNPITriggerWords.length; x++) {
+        if (allSlideText[i][j].toLowerCase().includes(MNPITriggerWords[x].toLowerCase())) {
+          displayOutput.push("Slide " + (i + 1) + " - Found indication of MNPI regarding " + MNPITriggerWords[x] + ". Please verify content of slide.");
+          console.log("Slide " + (i + 1) + " - Found indication of MNPI regarding " + MNPITriggerWords[x] + ". Please verify content of slide.");
         }
       }
     }
@@ -353,10 +427,51 @@ function checkMNPIAll() {
 //function for check sources single
 function checkSoucesSingle() {
 
+  //If Source: Bofa
+  currSlideText.forEach(function (x) {
+    if (x.toLowerCase().includes("source: bofa") || x.toLowerCase().includes("source : bofa") || x.toLowerCase().includes("source- bofa") || x.toLowerCase().includes("source - bofa")) {
+      if (x.toLowerCase().slice(-4) == "bofa") {
+        displayOutput.push("Slide " + slideno + " - Insufficient citation found. Please replace with more specific citation.");
+        console.log("Slide " + slideno + " - Insufficient citation found. Please replace with more specific citation.");
+      }
+    }
+  });
+
+  //If Source: Bofa Global Research
+  currSlideText.forEach(function (x) {
+    if (x.toLowerCase().includes("source: bofa global research") || x.toLowerCase().includes("source : bofa global research") || x.toLowerCase().includes("source- bofa global research") || x.toLowerCase().includes("source - bofa global research")) {
+      displayOutput.push("Slide " + slideno + " - Insufficient citation found. Please replace with more specific citation.");
+      console.log("Slide " + slideno + " - Insufficient citation found. Please replace with more specific citation.");
+    }
+  });
+
 }
 
 //function for check sources all
 function checkSourcesAll() {
+  //If Souce : Bofa
+  for (var i = 0; i < allSlideText.length; i++) {
+    for (var j = 0; j < allSlideText[i].length; j++) {
+      if (allSlideText[i][j].toLowerCase().includes("source: bofa") || allSlideText[i][j].toLowerCase().includes("source : bofa") || allSlideText[i][j].toLowerCase().includes("source- bofa") || allSlideText[i][j].toLowerCase().includes("source - bofa")) {
+        if (allSlideText[i][j].toLowerCase().slice(-4) == "bofa") {
+          displayOutput.push("Slide " + (i + 1) + " - Insufficient citation found. Please replace with more specific citation.");
+          console.log("Slide " + (i + 1) + " - Insufficient citation found. Please replace with more specific citation.");
+        }
+      }
+    }
+  }
+
+  //If Source: Bofa Global Research
+  for (var i = 0; i < allSlideText.length; i++) {
+    for (var j = 0; j < allSlideText[i].length; j++) {
+      if (allSlideText[i][j].toLowerCase().includes("source: bofa global research") || allSlideText[i][j].toLowerCase().includes("source : bofa global research") || allSlideText[i][j].toLowerCase().includes("source- bofa global research") || allSlideText[i][j].toLowerCase().includes("source - bofa global research")) {
+        displayOutput.push("Slide " + (i + 1) + " - Insufficient citation found. Please replace with more specific citation.");
+        console.log("Slide " + (i + 1) + " - Insufficient citation found. Please replace with more specific citation.");
+      }
+    }
+  }
+
+
 
 }
 
