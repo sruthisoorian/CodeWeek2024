@@ -197,46 +197,50 @@ async function hasDisclaimer(text) {
 }
 
 
-// Function to check if the disclaimer is present in any of the slides
 async function checkBBAll() {
-  await PowerPoint.run(async (context) => {
-      const sls = context.presentation.slides;
-      sls.load("items");
-      await context.sync();
-      //console.log("Number of slides: " + sls.items.length);
+  let disclaimerFound = false;
 
-      for (let j = 0; j < sls.items.length; j++) {
-          const sheet = context.presentation.slides.getItemAt(j);
-          const shapes = sheet.shapes;
-          shapes.load("items");
+  await PowerPoint.run(async (context) => {
+    const sls = context.presentation.slides;
+    sls.load("items");
+    await context.sync();
+
+    for (let j = 0; j < sls.items.length; j++) {
+      const sheet = context.presentation.slides.getItemAt(j);
+      const shapes = sheet.shapes;
+      shapes.load("items");
+      await context.sync();
+
+      for (let i = 0; i < shapes.items.length; i++) {
+        const s = shapes.getItemAt(i);
+        const t = s.textFrame.textRange;
+        t.load();
+        try {
           await context.sync();
 
-          //console.log("Number of shapes on this slide: ", shapes.items.length);
-
-          for (let i = 0; i < shapes.items.length; i++) {
-              const s = shapes.getItemAt(i);
-              const t = s.textFrame.textRange;
-              t.load();
-              try {
-                  await context.sync();
-
-                  // Check if the disclaimer is present in the current text
-                  if (await hasDisclaimer(t.text)) {
-                      console.log("Disclaimer found on slide " + (j + 1));
-                      return true;
-                  }
-
-              } catch (err) {
-                  console.log("Non-text shape skipped");
-              }
+          // Check if the disclaimer is present in the current text
+          if (await hasDisclaimer(t.text)) {
+            console.log("Disclaimer found on slide " + (j + 1));
+            disclaimerFound = true;
+            return;
           }
+        } catch (err) {
+          console.log("Non-text shape skipped");
+        }
       }
+    }
 
-      // If no disclaimer is found in any slide, log the result
-      console.log("Disclaimer not found in any slide");
-      return false;
+    // If no disclaimer is found in any slide, log the result
+    console.log("Disclaimer not found in any slide");
   });
+
+  // Display result in the result box after PowerPoint.run completes
+  const resultBox = document.getElementById("resultBox");
+  resultBox.innerHTML = disclaimerFound
+    ? "<div class='output-line'>Disclaimer found in at least one slide</div>"
+    : "<div class='output-line'>Disclaimer not found in any slide</div>";
 }
+
 
 // Function to check if the disclaimer is present on the current slide
 // async function checkBBSingle() {
