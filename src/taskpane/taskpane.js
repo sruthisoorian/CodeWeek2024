@@ -17,7 +17,7 @@ var allSlideText = []; //2D Array that holds strings of all slides -> for all sl
 const accountNumbers = ["6724301068", "8374882736", "2749930274"];
 const SNN = ["738-26-3677", "145-44-7809", "288-49-1174"];
 const OtherBankProducts = ["DreaMaker", "Eagle Community Home Loan"];
-const MNPITriggerWords = ["account", "SNN", "Legal Disputes", "M&A", "Hiring Plans"];
+const MNPITriggerWords = ["Legal Disputes", "M&A", "Hiring Plans"];
 
 //Output String Array
 var displayOutput = [];
@@ -27,7 +27,7 @@ Office.onReady(function (info) {
   if (info.host === Office.HostType.PowerPoint) {
 
     document.getElementById('view1').style.display = "block";
-    document.getElementById('current-slide').checked =  true;
+    document.getElementById('current-slide').checked = true;
     const infoIcons = document.getElementsByClassName("info-icon");
 
     // Show tooltip for the corresponding checklist item
@@ -133,85 +133,90 @@ function selectRadioButton() {
   console.log(selectedOption + " was selected");
 }
 
-function setSelection(sel){
+function setSelection(sel) {
   selectedOption = sel;
 
 }
 
-function checkBBDisclaimer(){
-  if(document.getElementById('current-slide').checked){
+function checkBBDisclaimer() {
+  if (document.getElementById('current-slide').checked) {
     // call the singleBB function here
-  } else if(document.getElementById('all-slides').checked){
+  } else if (document.getElementById('all-slides').checked) {
     // call the allBB function
   }
 }
 
 function checkMNPI() {
-  if(document.getElementById('current-slide').checked){
-    // call the singleMNPIfunction here
-    console.log("curr MNPI Selected");
-  } else if(document.getElementById('all-slides').checked){
-    // call the allMNPI function
-    console.log("all MNPI Selected");
+  cleanGlobalVarsAndArrays();
+  if (document.getElementById('current-slide').checked) {
+    extractCurrentSlideText();
+    checkMNPISingle();
+  } else if (document.getElementById('all-slides').checked) {
+    extractAllSlideText();
+    checkMNPIAll();
   }
 }
 
 function checkSource() {
-  if(document.getElementById('current-slide').checked){
+  if (document.getElementById('current-slide').checked) {
     // call the singleSource function here
-  } else if(document.getElementById('all-slides').checked){
+  } else if (document.getElementById('all-slides').checked) {
     // call the allSource function
   }
 }
 
-function checkAll(){
-  if(document.getElementById('current-slide').checked){
+function checkAll() {
+  if (document.getElementById('current-slide').checked) {
     // call the singleCheckAll function here
-  } else if(document.getElementById('all-slides').checked){
+  } else if (document.getElementById('all-slides').checked) {
     // call the allCheckAll function
   }
 }
 //BUTTON FUNCTIONS HERE
 
 //Function for single BB
-function checkBBSingle(){
+function checkBBSingle() {
 
 }
 
 //function for all BB
-function checkBBAll(){
+function checkBBAll() {
 
 }
 
 //function for check MNPI single
-function checkMNPISingle(){
-  
+function checkMNPISingle() {
+  console.log("HELLO MNPI Single");
+
+
+
+
 
 }
 
 //function for check MNPI all
-function checkMNPIAll(){
-
+function checkMNPIAll() {
+  console.log("HELLO MNPI All");
 }
 
 //function for check sources single
-function checkSoucesSingle(){
+function checkSoucesSingle() {
 
 }
 
 //function for check sources all
-function checkSourcesAll(){
+function checkSourcesAll() {
 
 }
 
 //function for everything check single
-function checkEverythingSingle(){
+function checkEverythingSingle() {
 
 }
 
 //function for everything check all
-function checkEverythingAll(){
-  
+function checkEverythingAll() {
+
 }
 
 
@@ -265,44 +270,46 @@ async function getCurrentSlideStrings(n) {
 
   });
 
+  await context.sync();
+
 }
 
 
 //EXTRACT strings of ALL SLIDES
 async function extractAllSlideText() {
   await PowerPoint.run(async (context) => {
-      const sls = context.presentation.slides;
-      sls.load("items");
+    const sls = context.presentation.slides;
+    sls.load("items");
+    await context.sync();
+    console.log("Number of slides: " + sls.items.length);
+
+    for (let j = 0; j < sls.items.length; j++) {
+      const sheet = context.presentation.slides.getItemAt(j);
+      const shapes = sheet.shapes;
+      shapes.load("items");
       await context.sync();
-      console.log("Number of slides: " + sls.items.length);
 
-      for (let j = 0; j < sls.items.length; j++) {
-          const sheet = context.presentation.slides.getItemAt(j);
-          const shapes = sheet.shapes;
-          shapes.load("items");
+      console.log("Number of shapes on this slide: ", shapes.items.length);
+      const slideStringsTemp = [];
+
+      for (let i = 0; i < shapes.items.length; i++) {
+        const s = shapes.getItemAt(i);
+        const t = s.textFrame.textRange;
+        t.load();
+        try {
           await context.sync();
+          console.log(t.text);
+          slideStringsTemp.push(t.text);
+        }
+        catch (err) {
+          console.log("Non-text shape skipped");
+        }
 
-          console.log("Number of shapes on this slide: ", shapes.items.length);
-          const slideStringsTemp = [];
+      }
 
-          for (let i = 0; i < shapes.items.length; i++) {
-              const s = shapes.getItemAt(i);
-              const t = s.textFrame.textRange;
-              t.load();
-              try {
-                  await context.sync();
-                  console.log(t.text);
-                  slideStringsTemp.push(t.text);
-              }
-              catch (err) {
-                  console.log("Non-text shape skipped");
-              }
+      allSlideText.push(slideStringsTemp);
 
-          }
-
-          allSlideText.push(slideStringsTemp);
-
-      } 
+    }
 
   });
 }
@@ -310,14 +317,22 @@ async function extractAllSlideText() {
 //functions to print slide string arrays to console
 function printCurrStrings() {
   currSlideText.forEach(function (x) {
-      console.log(x);
+    console.log(x);
   })
 }
 
 function printAllStrings() {
   for (var i = 0; i < allSlideText.length; i++) {
-      for (var j = 0; j < allSlideText[i].length; j++) {
-          console.log(allSlideText[i][j] + " from slide ", i+1);
-      }
+    for (var j = 0; j < allSlideText[i].length; j++) {
+      console.log(allSlideText[i][j] + " from slide ", i + 1);
+    }
   }
+}
+
+//clear extracted text variables and arrays
+function cleanGlobalVarsAndArrays() {
+  slideno = "n/a";
+  currSlideText = [];
+
+  allSlideText = [];
 }
