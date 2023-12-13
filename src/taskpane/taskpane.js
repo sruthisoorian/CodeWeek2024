@@ -7,11 +7,12 @@
 
 
 // GLOBAL VARIABLES
-var selectedOption = "current"; // Variable to select radio button
+var selectedOption = ""; // Variable to select radio button
 var slideno = "n/a";  // Variable that hold current slide number -> for single slide text extraction
 var currSlideText = [];  //Array that holds strings of current slide --> for single slide text extraction
 
 var allSlideText = []; //2D Array that holds strings of all slides -> for all slides text extraction
+
 
 //MNPI String Banks
 const accountNumbers = ["6724301068", "8374882736", "2749930274"];
@@ -23,11 +24,11 @@ const MNPITriggerWords = ["account", "SNN", "Legal Disputes", "M&A", "Hiring Pla
 var displayOutput = [];
 
 
-Office.onReady(function (info) {
+Office.onReady((info) => {
   if (info.host === Office.HostType.PowerPoint) {
 
     document.getElementById('view1').style.display = "block";
-    document.getElementById('current-slide').checked =  true;
+    // document.getElementById('current-slide').checked =  true;
     const infoIcons = document.getElementsByClassName("info-icon");
 
     // Show tooltip for the corresponding checklist item
@@ -84,6 +85,8 @@ Office.onReady(function (info) {
     });
 
     //event bind the buttons
+    document.getElementById("curr-slides-button").onclick = () => tryCatch(extractCurrentSlideText);
+    document.getElementById("all-slides-button").onclick = () => tryCatch(extractAllSlideText);
     document.getElementById("check-bb-button").onclick = () => checkBBDisclaimer();
     document.getElementById("check-mnpi-button").onclick = () => checkMNPI();
     document.getElementById("check-source-button").onclick = () => checkSource();
@@ -123,55 +126,61 @@ function hideTooltip() {
 }
 
 
-function selectRadioButton() {
-  // Check which radio button is selected and set the selectedOption variable to the selected radio button
-  if (document.getElementById('current-slide').checked) {
-    setSelection("current");
-  } else if (document.getElementById('all-slides').checked) {
-    setSelection("all");
-  }
-  console.log(selectedOption + " was selected");
-}
+// function selectRadioButton() {
+//   // Check which radio button is selected and set the selectedOption variable to the selected radio button
+//   if (document.getElementById('current-slide').checked) {
+//     setSelection("current");
+//   } else if (document.getElementById('all-slides').checked) {
+//     setSelection("all");
+//   }
+//   console.log(selectedOption + " was selected");
+// }
 
-function setSelection(sel){
-  selectedOption = sel;
+// function setSelection(sel){
+//   selectedOption = sel;
 
-}
+// }
 
 function checkBBDisclaimer(){
-  if(document.getElementById('current-slide').checked){
+  if(selectedOption == "current"){
     // call the singleBB function here
-  } else if(document.getElementById('all-slides').checked){
+  } else if(selectedOption == "all"){
     // call the allBB function
   }
 }
 
 function checkMNPI() {
-  if(document.getElementById('current-slide').checked){
+  if(selectedOption == "current"){
     // call the singleMNPIfunction here
+    console.log("SelectedOption is: ", selectedOption);
     console.log("curr MNPI Selected");
-  } else if(document.getElementById('all-slides').checked){
+    printCurrStrings();
+  } else if(selectedOption == "all"){
     // call the allMNPI function
+    console.log("SelectedOption is: ", selectedOption);
     console.log("all MNPI Selected");
+    printAllStrings();
   }
 }
 
 function checkSource() {
-  if(document.getElementById('current-slide').checked){
+  if(selectedOption == "current"){
     // call the singleSource function here
-  } else if(document.getElementById('all-slides').checked){
+  } else if(selectedOption == "all"){
     // call the allSource function
   }
 }
 
 function checkAll(){
-  if(document.getElementById('current-slide').checked){
+  if(selectedOption == "current"){
     // call the singleCheckAll function here
-  } else if(document.getElementById('all-slides').checked){
+  } else if(selectedOption == "all"){
     // call the allCheckAll function
   }
 }
-//BUTTON FUNCTIONS HERE
+
+
+//BUTTON ACTION FUNCTIONS HERE
 
 //Function for single BB
 function checkBBSingle(){
@@ -217,6 +226,8 @@ function checkEverythingAll(){
 
 //EXTRACT strings of CURRENT SLIDE
 function extractCurrentSlideText() {
+  selectedOption = "current";
+  resetGlobalVars();
   Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
     var s = "";
     if (asyncResult.status === Office.AsyncResultStatus.Failed) {
@@ -270,6 +281,8 @@ async function getCurrentSlideStrings(n) {
 
 //EXTRACT strings of ALL SLIDES
 async function extractAllSlideText() {
+  selectedOption = "all";
+  resetGlobalVars();
   await PowerPoint.run(async (context) => {
       const sls = context.presentation.slides;
       sls.load("items");
@@ -319,5 +332,23 @@ function printAllStrings() {
       for (var j = 0; j < allSlideText[i].length; j++) {
           console.log(allSlideText[i][j] + " from slide ", i+1);
       }
+  }
+}
+
+//functions to reset array and slide variables
+function resetGlobalVars(){
+  slideno = "n/a";
+  currSlideText = [];
+
+  allSlideText = []; 
+
+}
+
+// Default helper for invoking an action and handling errors.
+async function tryCatch(callback) {
+  try {
+      await callback();
+  } catch (error) {
+      console.log("Error: " + error.toString());
   }
 }
