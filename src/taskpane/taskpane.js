@@ -227,6 +227,7 @@ function checkEverythingAll(){
 //EXTRACT strings of CURRENT SLIDE
 function extractCurrentSlideText() {
   selectedOption = "current";
+  document.getElementById('region-search-label').innerText = 'Current Slide Only';
   resetGlobalVars();
   Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, (asyncResult) => {
     var s = "";
@@ -282,6 +283,7 @@ async function getCurrentSlideStrings(n) {
 //EXTRACT strings of ALL SLIDES
 async function extractAllSlideText() {
   selectedOption = "all";
+  document.getElementById('region-search-label').innerText = 'All Slides';
   resetGlobalVars();
   await PowerPoint.run(async (context) => {
       const sls = context.presentation.slides;
