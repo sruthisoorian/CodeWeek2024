@@ -7,11 +7,20 @@
 
 
 // GLOBAL VARIABLES
-var selectedOption; // Variable to select radio button
+var selectedOption = "current"; // Variable to select radio button
 var slideno = "n/a";  // Variable that hold current slide number -> for single slide text extraction
 var currSlideText = [];  //Array that holds strings of current slide --> for single slide text extraction
 
 var allSlideText = []; //2D Array that holds strings of all slides -> for all slides text extraction
+
+//MNPI String Banks
+const accountNumbers = ["6724301068", "8374882736", "2749930274"];
+const SNN = ["738-26-3677", "145-44-7809", "288-49-1174"];
+const OtherBankProducts = ["DreaMaker", "Eagle Community Home Loan"];
+const MNPITriggerWords = ["account", "SNN", "Legal Disputes", "M&A", "Hiring Plans"];
+
+//Output String Array
+var displayOutput = [];
 
 
 Office.onReady(function (info) {
@@ -72,6 +81,12 @@ Office.onReady(function (info) {
         labels[index].style.display = "block";
       });
     });
+
+    //event bind the buttons
+    document.getElementById("check-bb-button").onclick = () => checkBBDisclaimer();
+    document.getElementById("check-mnpi-button").onclick = () => checkMNPI();
+    document.getElementById("check-source-button").onclick = () => checkSource();
+    document.getElementById("check-all-button").onclick = () => checkAll();
   }
 });
 
@@ -110,40 +125,48 @@ function hideTooltip() {
 function selectRadioButton() {
   // Check which radio button is selected and set the selectedOption variable to the selected radio button
   if (document.getElementById('current-slide').checked) {
-    selectedOption = 'current';
+    setSelection("current");
   } else if (document.getElementById('all-slides').checked) {
-    selectedOption = 'all';
+    setSelection("all");
   }
+  console.log(selectedOption + " was selected");
+}
+
+function setSelection(sel){
+  selectedOption = sel;
+
 }
 
 function checkBBDisclaimer(){
-  if(selectedOption === 'current'){
+  if(document.getElementById('current-slide').checked){
     // call the singleBB function here
-  } else if(selectedOption === 'all'){
+  } else if(document.getElementById('all-slides').checked){
     // call the allBB function
   }
 }
 
 function checkMNPI() {
-  if(selectedOption === 'current'){
+  if(document.getElementById('current-slide').checked){
     // call the singleMNPIfunction here
-  } else if(selectedOption === 'all'){
+    console.log("curr MNPI Selected");
+  } else if(document.getElementById('all-slides').checked){
     // call the allMNPI function
+    console.log("all MNPI Selected");
   }
 }
 
 function checkSource() {
-  if(selectedOption === 'current'){
+  if(document.getElementById('current-slide').checked){
     // call the singleSource function here
-  } else if(selectedOption === 'all'){
+  } else if(document.getElementById('all-slides').checked){
     // call the allSource function
   }
 }
 
 function checkAll(){
-  if(selectedOption === 'current'){
+  if(document.getElementById('current-slide').checked){
     // call the singleCheckAll function here
-  } else if(selectedOption === 'all'){
+  } else if(document.getElementById('all-slides').checked){
     // call the allCheckAll function
   }
 }
@@ -161,6 +184,7 @@ function checkBBAll(){
 
 //function for check MNPI single
 function checkMNPISingle(){
+  
 
 }
 
