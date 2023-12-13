@@ -16,9 +16,9 @@ var allSlideText = []; //2D Array that holds strings of all slides -> for all sl
 
 //MNPI String Banks
 const accountNumbers = ["6724301068", "8374882736", "2749930274"];
-const SNN = ["738-26-3677", "145-44-7809", "288-49-1174"];
+const SSN = ["738-26-3677", "145-44-7809", "288-49-1174"];
 const OtherBankProducts = ["DreaMaker", "Eagle Community Home Loan"];
-const MNPITriggerWords = ["account", "SNN", "Legal Disputes", "M&A", "Hiring Plans"];
+const MNPITriggerWords = ["Legal Disputes", "M&A", "Hiring Plans"];
 
 //Output String Array
 var displayOutput = [];
@@ -141,40 +141,37 @@ function hideTooltip() {
 
 // }
 
-function checkBBDisclaimer(){
-  if(selectedOption == "current"){
+function checkBBDisclaimer() {
+  if (selectedOption == "current") {
     // call the singleBB function here
-  } else if(selectedOption == "all"){
+  } else if (selectedOption == "all") {
     // call the allBB function
   }
 }
 
 function checkMNPI() {
-  if(selectedOption == "current"){
+  console.log("Running " + selectedOption + " MNPI check");
+  if (selectedOption == "current") {
     // call the singleMNPIfunction here
-    console.log("SelectedOption is: ", selectedOption);
-    console.log("curr MNPI Selected");
-    printCurrStrings();
-  } else if(selectedOption == "all"){
+    checkMNPISingle();
+  } else if (selectedOption == "all") {
     // call the allMNPI function
-    console.log("SelectedOption is: ", selectedOption);
-    console.log("all MNPI Selected");
-    printAllStrings();
+    checkMNPIAll();
   }
 }
 
 function checkSource() {
-  if(selectedOption == "current"){
+  if (selectedOption == "current") {
     // call the singleSource function here
-  } else if(selectedOption == "all"){
+  } else if (selectedOption == "all") {
     // call the allSource function
   }
 }
 
-function checkAll(){
-  if(selectedOption == "current"){
+function checkAll() {
+  if (selectedOption == "current") {
     // call the singleCheckAll function here
-  } else if(selectedOption == "all"){
+  } else if (selectedOption == "all") {
     // call the allCheckAll function
   }
 }
@@ -183,44 +180,112 @@ function checkAll(){
 //BUTTON ACTION FUNCTIONS HERE
 
 //Function for single BB
-function checkBBSingle(){
+function checkBBSingle() {
 
 }
 
 //function for all BB
-function checkBBAll(){
+function checkBBAll() {
 
 }
 
 //function for check MNPI single
-function checkMNPISingle(){
-  
+function checkMNPISingle() {
+
+  currSlideText.forEach(function (x) {
+    for(let i = 0; i < accountNumbers.length; i++){
+      if (x.toLowerCase().includes(accountNumbers[i].toString())){
+        displayOutput.push("Slide " + slideno + " - Found account number " + accountNumbers[i].toString() + ". Please remove from slide immediately.");
+        console.log("Slide " + slideno + " - Found account number " + accountNumbers[i].toString() + ". Please remove from slide immediately.");
+      }
+    }
+  });
+
+  currSlideText.forEach(function (x) {
+    for(let i = 0; i < SSN.length; i++){
+      if (x.toLowerCase().includes(SSN[i])){
+        displayOutput.push("Slide " + slideno + " - Found SSN number " + SSN[i].toString() + ". Please remove from slide immediately.");
+        console.log("Slide " + slideno + " - Found SSN number " + SSN[i].toString()  + ". Please remove from slide immediately.");
+      }
+    }
+  });
+
+  currSlideText.forEach(function (x) {
+    for(let i = 0; i < OtherBankProducts.length; i++){
+      if (x.includes(OtherBankProducts[i])){
+        displayOutput.push("Slide " + slideno + " - Found mention of competitor bank product: " + OtherBankProducts[i] + ". Please verify content of slide.");
+        console.log("Slide " + slideno + " - Found mention of competitor bank product: " + OtherBankProducts[i] + ". Please verify content of slide.");
+      }
+    }
+  });
+
+  currSlideText.forEach(function (x) {
+    for(let i = 0; i < MNPITriggerWords.length; i++){
+      if (x.toLowerCase().includes(MNPITriggerWords[i].toLowerCase())){
+        displayOutput.push("Slide " + slideno + " - Found indication of MNPI regarding " + MNPITriggerWords[i] + ". Please verify content of slide.");
+        console.log("Slide " + slideno + " - Found indication of MNPI regarding " + MNPITriggerWords[i] + ". Please verify content of slide.");
+      }
+    }
+  });
+
 
 }
 
 //function for check MNPI all
-function checkMNPIAll(){
+function checkMNPIAll() {
+  for (var i = 0; i < allSlideText.length; i++) {
+    for (var j = 0; j < allSlideText[i].length; j++) {
+      //check for account numbers
+      for(let x = 0; x < accountNumbers.length; x++){
+        if (allSlideText[i][j].toLowerCase().includes(accountNumbers[x].toString())){
+          displayOutput.push("Slide " + (i+1) + " - Found account number " + accountNumbers[x].toString() + ". Please remove from slide immediately.");
+          console.log("Slide " + (i+1) + " - Found account number " + accountNumbers[x].toString() + ". Please remove from slide immediately.");
+        }
+      }
+      //check for ssns
+      for(let x = 0; x < SSN.length; x++){
+        if (allSlideText[i][j].toLowerCase().includes(SSN[x])){
+          displayOutput.push("Slide " + (i+1) + " - Found SSN number " + SSN[x].toString() + ". Please remove from slide immediately.");
+          console.log("Slide " + (i+1) + " - Found SSN number " + SSN[x].toString()  + ". Please remove from slide immediately.");
+        }
+      }
+      //check for other bank products
+      for(let x = 0; x < OtherBankProducts.length; x++){
+        if (allSlideText[i][j].includes(OtherBankProducts[x])){
+          displayOutput.push("Slide " + (i+1) + " - Found mention of competitor bank product: " + OtherBankProducts[x] + ". Please verify content of slide.");
+          console.log("Slide " + (i+1) + " - Found mention of competitor bank product: " + OtherBankProducts[x] + ". Please verify content of slide.");
+        }
+      }
+      //check for MNPI trigger words
+      for(let x = 0; x < MNPITriggerWords.length; x++){
+        if (allSlideText[i][j].toLowerCase().includes(MNPITriggerWords[x].toLowerCase())){
+          displayOutput.push("Slide " + (i+1) + " - Found indication of MNPI regarding " + MNPITriggerWords[x] + ". Please verify content of slide.");
+          console.log("Slide " + (i+1) + " - Found indication of MNPI regarding " + MNPITriggerWords[x] + ". Please verify content of slide.");
+        }
+      }
+    }
+  }
 
 }
 
 //function for check sources single
-function checkSoucesSingle(){
+function checkSoucesSingle() {
 
 }
 
 //function for check sources all
-function checkSourcesAll(){
+function checkSourcesAll() {
 
 }
 
 //function for everything check single
-function checkEverythingSingle(){
+function checkEverythingSingle() {
 
 }
 
 //function for everything check all
-function checkEverythingAll(){
-  
+function checkEverythingAll() {
+
 }
 
 
@@ -284,38 +349,38 @@ async function extractAllSlideText() {
   selectedOption = "all";
   resetGlobalVars();
   await PowerPoint.run(async (context) => {
-      const sls = context.presentation.slides;
-      sls.load("items");
+    const sls = context.presentation.slides;
+    sls.load("items");
+    await context.sync();
+    console.log("Number of slides: " + sls.items.length);
+
+    for (let j = 0; j < sls.items.length; j++) {
+      const sheet = context.presentation.slides.getItemAt(j);
+      const shapes = sheet.shapes;
+      shapes.load("items");
       await context.sync();
-      console.log("Number of slides: " + sls.items.length);
 
-      for (let j = 0; j < sls.items.length; j++) {
-          const sheet = context.presentation.slides.getItemAt(j);
-          const shapes = sheet.shapes;
-          shapes.load("items");
+      console.log("Number of shapes on this slide: ", shapes.items.length);
+      const slideStringsTemp = [];
+
+      for (let i = 0; i < shapes.items.length; i++) {
+        const s = shapes.getItemAt(i);
+        const t = s.textFrame.textRange;
+        t.load();
+        try {
           await context.sync();
+          console.log(t.text);
+          slideStringsTemp.push(t.text);
+        }
+        catch (err) {
+          console.log("Non-text shape skipped");
+        }
 
-          console.log("Number of shapes on this slide: ", shapes.items.length);
-          const slideStringsTemp = [];
+      }
 
-          for (let i = 0; i < shapes.items.length; i++) {
-              const s = shapes.getItemAt(i);
-              const t = s.textFrame.textRange;
-              t.load();
-              try {
-                  await context.sync();
-                  console.log(t.text);
-                  slideStringsTemp.push(t.text);
-              }
-              catch (err) {
-                  console.log("Non-text shape skipped");
-              }
+      allSlideText.push(slideStringsTemp);
 
-          }
-
-          allSlideText.push(slideStringsTemp);
-
-      } 
+    }
 
   });
 }
@@ -323,32 +388,33 @@ async function extractAllSlideText() {
 //functions to print slide string arrays to console
 function printCurrStrings() {
   currSlideText.forEach(function (x) {
-      console.log(x);
+    console.log(x);
   })
 }
 
 function printAllStrings() {
   for (var i = 0; i < allSlideText.length; i++) {
-      for (var j = 0; j < allSlideText[i].length; j++) {
-          console.log(allSlideText[i][j] + " from slide ", i+1);
-      }
+    for (var j = 0; j < allSlideText[i].length; j++) {
+      console.log(allSlideText[i][j] + " from slide ", i + 1);
+    }
   }
 }
 
 //functions to reset array and slide variables
-function resetGlobalVars(){
+function resetGlobalVars() {
   slideno = "n/a";
   currSlideText = [];
 
-  allSlideText = []; 
+  allSlideText = [];
+  displayOutput = [];
 
 }
 
 // Default helper for invoking an action and handling errors.
 async function tryCatch(callback) {
   try {
-      await callback();
+    await callback();
   } catch (error) {
-      console.log("Error: " + error.toString());
+    console.log("Error: " + error.toString());
   }
 }
