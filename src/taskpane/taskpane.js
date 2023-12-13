@@ -23,7 +23,7 @@ const MNPITriggerWords = ["account", "SNN", "Legal Disputes", "M&A", "Hiring Pla
 var displayOutput = [];
 
 
-Office.onReady(function (info) {
+Office.onReady((info) => {
   if (info.host === Office.HostType.PowerPoint) {
 
     document.getElementById('view1').style.display = "block";
@@ -84,6 +84,8 @@ Office.onReady(function (info) {
     });
 
     //event bind the buttons
+    document.getElementById("curr-slides-button").onclick = () => tryCatch(extractCurrentSlideText);
+    document.getElementById("all-slides-button").onclick = () => tryCatch(extractAllSlideText);
     document.getElementById("check-bb-button").onclick = () => checkBBDisclaimer();
     document.getElementById("check-mnpi-button").onclick = () => checkMNPI();
     document.getElementById("check-source-button").onclick = () => checkSource();
@@ -319,5 +321,14 @@ function printAllStrings() {
       for (var j = 0; j < allSlideText[i].length; j++) {
           console.log(allSlideText[i][j] + " from slide ", i+1);
       }
+  }
+}
+
+// Default helper for invoking an action and handling errors.
+async function tryCatch(callback) {
+  try {
+      await callback();
+  } catch (error) {
+      console.log("Error: " + error.toString());
   }
 }
