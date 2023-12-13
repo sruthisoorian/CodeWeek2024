@@ -91,6 +91,7 @@ Office.onReady((info) => {
     document.getElementById("check-mnpi-button").onclick = () => checkMNPI();
     document.getElementById("check-source-button").onclick = () => checkSource();
     document.getElementById("check-all-button").onclick = () => checkAll();
+    document.getElementById("check-bb-button").onclick = () => checkBBDisclaimer();
   }
 });
 
@@ -143,9 +144,9 @@ function hideTooltip() {
 
 function checkBBDisclaimer(){
   if(selectedOption == "current"){
-    // call the singleBB function here
+    checkBBSingle();
   } else if(selectedOption == "all"){
-    // call the allBB function
+    checkBBAll();
   }
 }
 
@@ -182,15 +183,90 @@ function checkAll(){
 
 //BUTTON ACTION FUNCTIONS HERE
 
-//Function for single BB
-function checkBBSingle(){
-
+//Check if there is a BB Disclaimer
+async function hasDisclaimer(text) {
+  // Define the disclaimer text to search for
+  const disclaimerText = "These materials have been prepared by one or more affiliates of Bank of America Corporation";
+  // Convert both texts to lowercase for case-insensitive comparison
+  const lowerCaseText = text.toLowerCase();
+  const lowerCaseDisclaimer = disclaimerText.toLowerCase();
+  // Check if the disclaimer text is present in the provided text
+  return lowerCaseText.includes(lowerCaseDisclaimer);
 }
 
-//function for all BB
-function checkBBAll(){
 
+// Function to check if the disclaimer is present in any of the slides
+async function checkBBAll() {
+  await PowerPoint.run(async (context) => {
+      const sls = context.presentation.slides;
+      sls.load("items");
+      await context.sync();
+      //console.log("Number of slides: " + sls.items.length);
+
+      for (let j = 0; j < sls.items.length; j++) {
+          const sheet = context.presentation.slides.getItemAt(j);
+          const shapes = sheet.shapes;
+          shapes.load("items");
+          await context.sync();
+
+          //console.log("Number of shapes on this slide: ", shapes.items.length);
+
+          for (let i = 0; i < shapes.items.length; i++) {
+              const s = shapes.getItemAt(i);
+              const t = s.textFrame.textRange;
+              t.load();
+              try {
+                  await context.sync();
+
+                  // Check if the disclaimer is present in the current text
+                  if (await hasDisclaimer(t.text)) {
+                      console.log("Disclaimer found on slide " + (j + 1));
+                      return true;
+                  }
+
+              } catch (err) {
+                  console.log("Non-text shape skipped");
+              }
+          }
+      }
+
+      // If no disclaimer is found in any slide, log the result
+      console.log("Disclaimer not found in any slide");
+      return false;
+  });
 }
+
+// Function to check if the disclaimer is present on the current slide
+// async function checkBBSingle() {
+//   await PowerPoint.run(async (context) => {
+//     const currentSlide = context.presentation.slides.getActiveSlide();
+//     const shapes = currentSlide.shapes;
+//     shapes.load("items");
+//     await context.sync();
+
+//     for (let i = 0; i < shapes.items.length; i++) {
+//       const shape = shapes.items[i];
+//       const textRange = shape.textFrame.textRange;
+//       textRange.load();
+
+//       try {
+//         await context.sync();
+
+//         // Check if the disclaimer is present in the current text
+//         if (await hasDisclaimer(textRange.text)) {
+//           console.log("Disclaimer found on the current slide");
+//           return true;
+//         }
+//       } catch (err) {
+//         console.log("Non-text shape skipped");
+//       }
+//     }
+
+//     // If no disclaimer is found on the current slide, log the result
+//     console.log("Disclaimer not found on the current slide");
+//     return false;
+//   });
+// }
 
 //function for check MNPI single
 function checkMNPISingle(){
