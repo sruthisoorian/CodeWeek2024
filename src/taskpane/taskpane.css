@@ -253,6 +253,17 @@ input[type="radio"] {
     color:#fff;
 }
 
+.region-button{
+    margin-left: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 15px;
+    display: inline-block;
+    background-color:#d3093b;
+    color:#fff;
+}
+
 .result-box {
     margin-top: 10px;
     height: 240px;

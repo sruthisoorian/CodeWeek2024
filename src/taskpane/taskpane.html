@@ -31,25 +31,26 @@
     <div id="view1" class="tabcontent">
         <h2>Business Banking QA Assessment Tools</h2>
 
-        <label class="instruction"> Please select a radio button before clicking on the buttons</label>
+        <label class="instruction"> Please select a Region of Search before QA Action</label>
         <!-- Slide Selection to allow user to choose to work with the current slide or the entire slide deck-->
 
-        <div class="slide-selection">
+        <!-- <div class="slide-selection">
             <input type="radio" id="current-slide" name="slide" value="current" onchange="selectRadioButton()">
             <label class="radio-label" for="current-slide">Current Slide</label>
             <input type="radio" id="all-slides" name="slide" value="all" onchange="selectRadioButton()">
             <label class="radio-label" for="all-slides">All Slides</label>
-        </div>
+        </div> -->
 
+        <div>Region of Search: </div>
+        <br>
         <div class="selection-buttons">
-            <button class="tool-button" id="curr-slides-button"> Current Slide Only </button> <br> <br>
-            <button class="tool-button" id="all-slides-button"> All Slides </button> <br> <br>
-
+            <button class="region-button" id="curr-slides-button"> Current Slide Only </button>
+            <button class="region-button" id="all-slides-button"> All Slides </button>
         </div>
 
+        <div>QA Actions:</div>
+        <br>
         <div class="add-in-buttons">
-            <br>
-
             <button class="tool-button" id="check-bb-button"> Check BB Disclaimer </button> <br> <br>
             <button class="tool-button" id="check-mnpi-button"> Check MNPI </button> <br> <br>
             <button class="tool-button" id="check-source-button"> Check Source </button> <br> <br>
