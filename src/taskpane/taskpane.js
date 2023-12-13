@@ -29,6 +29,8 @@ Office.onReady((info) => {
 
     document.getElementById('view1').style.display = "block";
     // document.getElementById('current-slide').checked =  true;
+
+    document.getElementById('region-search-label').innerText = '';
     const infoIcons = document.getElementsByClassName("info-icon");
 
     // Show tooltip for the corresponding checklist item
