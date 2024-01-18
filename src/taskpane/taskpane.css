@@ -172,6 +172,7 @@ input[type="checkbox"] {
 .tabcontent {
     display: none;
     padding: 20px;
+    padding-top: 0px;
     border: 1px solid #ccc;
     width: 100%;
     box-sizing: border-box;
@@ -307,7 +308,7 @@ input[type="radio"] {
     padding-left: 16px;
     font-weight: bold;
     margin-bottom: 5px;
-    margin-top: 20px;
+    margin-top: 10px;
     color: black;
 }
 
