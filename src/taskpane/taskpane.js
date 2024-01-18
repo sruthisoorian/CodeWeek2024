@@ -96,6 +96,8 @@ Office.onReady((info) => {
     document.getElementById("check-source-button").onclick = () => checkSource();
     document.getElementById("check-all-button").onclick = () => checkAll();
     document.getElementById("check-bb-button").onclick = () => checkBBDisclaimer();
+
+    document.getElementById("clear-output-button").onclick = () => clearOutputButtonPressed();
   }
 });
 
@@ -631,6 +633,14 @@ function resetGlobalVars() {
 function resetDisplayOutput(){
   displayOutput = [];
   document.getElementById('output-paragraph').innerText = '';
+}
+
+function clearOutputButtonPressed(){
+  resetDisplayOutput();
+  selectedOption = "";
+  document.getElementById('region-search-label').innerText = '';
+  resetGlobalVars();
+
 }
 
 // Default helper for invoking an action and handling errors.
