@@ -31,8 +31,8 @@
     <div id="view1" class="tabcontent">
         <h2>Business Banking QA Assessment Tools</h2>
 
-        <label class="instruction"> Please select a Region of Search before QA Action</label>
-        <br>
+        <label class="instruction"> Please select a Region of Search before running QA Action</label>
+        <div style="height: 5px;"></div>
         <!-- Slide Selection to allow user to choose to work with the current slide or the entire slide deck-->
 
         <!-- <div class="slide-selection">
@@ -41,19 +41,21 @@
             <input type="radio" id="all-slides" name="slide" value="all" onchange="selectRadioButton()">
             <label class="radio-label" for="all-slides">All Slides</label>
         </div> -->
-        <br>
         <label class="region-search">Region of Search: </label>
         <label class="search-label" id="region-search-label"></label>
         <div class="selection-buttons">
-            <button class="region-button" id="curr-slides-button"> Current Slide Only </button>
+            <button class="region-button" id="curr-slides-button"> Current Slide </button>
             <button class="region-button" id="all-slides-button"> All Slides </button>
         </div>
 
         <div class="qa-actions">QA Actions:</div>
         <div class="add-in-buttons">
-            <button class="tool-button" id="check-bb-button"> Check BB Disclaimer </button> <br> <br>
-            <button class="tool-button" id="check-mnpi-button"> Check MNPI </button> <br> <br>
-            <button class="tool-button" id="check-source-button"> Check Source </button> <br> <br>
+            <button class="tool-button" id="check-bb-button"> Check BB Disclaimer </button>
+            <div style="height: 5px;"></div>
+            <button class="tool-button" id="check-mnpi-button"> Check MNPI </button>
+            <div style="height: 5px;"></div>
+            <button class="tool-button" id="check-source-button"> Check Source </button>
+            <div style="height: 5px;"></div>
             <button class="tool-button" id="check-all-button"> Apply all checks </button>
 
         </div>
